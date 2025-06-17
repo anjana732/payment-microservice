@@ -1,6 +1,5 @@
-import winston from "winston/lib/winston/config";
+import winston from "winston";
 import path, { format } from 'path';
-import { exitOnError, level } from "winston";
 import morgan from "morgan";
 
 const logDir = 'logs';
@@ -19,7 +18,7 @@ const logFormat = winston.format.combine(
 
 const jsonLogFormat = winston.format.combine(
     winston.format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
-    winston.format.JSON()
+    winston.format.json()
 )
 
 const transports = [];
@@ -40,7 +39,7 @@ if(process.env.NODE_ENV !== 'production'){
 transports.push(
     new winston.transports.File({
         filename: errorLogPath,
-        level: error,
+        level: 'error',
         format: jsonLogFormat,
         maxsize: 5 * 1024 * 1024,
         maxFiles: 5,
@@ -49,7 +48,7 @@ transports.push(
     }),
     new winston.transports.File({
         filename: combinedLogPath,
-        level: info,
+        level: 'info',
         format: jsonLogFormat,
         maxsize: 10* 1024 * 1024,
         maxFiles: 10,

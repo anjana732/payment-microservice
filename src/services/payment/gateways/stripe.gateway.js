@@ -1,7 +1,9 @@
 import Stripe from "stripe";
 import config from "../../../config/payment.config.js";
 
-const stripe = Stripe(config.stripe.secretKey);
+const stripe = Stripe(config.stripe.secretKey, {
+    apiVersion: '2022-11-15',
+});
 
 const stripeGateway = {
     createPaymentIntent: async (amount,currency,orderId, paymentMethodId, customerId) => {
@@ -10,8 +12,8 @@ const stripeGateway = {
             currency: currency,
             description: `Order ${orderId}`,
             metadata: {order_id: orderId},
-            confirm: true,
-            off_session: true
+            // confirm: true,
+            // off_session: true
         };
 
         if(paymentMethodId) params.payment_method = paymentMethodId;

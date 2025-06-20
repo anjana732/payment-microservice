@@ -7,7 +7,7 @@ const razorpay = new Razorpay({
 })
 
 const razorpayGateway = {
-    createOrder: async (amount, currency, OrderedBulkOperation, notes={}) => {
+    createOrder: async (amount, currency, orderId, notes={}) => {
         const options ={
             amount: Math.round(amount *100),
             currency: currency,

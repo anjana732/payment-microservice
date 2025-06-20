@@ -1,18 +1,24 @@
 import stripeGateway from "../gateways/stripe.gateway.js";
+import razorpayGateway from "../gateways/razorpay.gateway.js";
 
 const paymentManager = {
-    processPayment: async (gateway, amount, currency, OrderId, paymentDetails = {})=>{
+    processPayment: async (gateway, amount, currency, orderId, paymentDetails = {})=>{
         switch(gateway){
             case 'stripe': 
                 return stripeGateway.createPaymentIntent(
                     amount,
                     currency,
-                    OrderId,
+                    orderId,
                     paymentDetails.paymentMethodId,
                     paymentDetails.customerId
                 );
             case 'razorpay':
-                return '';
+                return razorpayGateway.createOrder(
+                    amount,
+                    currency,
+                    orderId,
+                    paymentDetails.notes
+                );
             default: 
                 throw new Error('Invalid payment gateway specified');
         }
@@ -23,7 +29,7 @@ const paymentManager = {
             case 'stripe' :
                 return stripeGateway.createRefund(paymentId, amount);
             case 'razorpay':
-                return '';
+                return razorpayGateway.createRefund(paymentId, amount);
             default: 
                 throw new Error('Invalid payment gateway specified for refund.');
         }

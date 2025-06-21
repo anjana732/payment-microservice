@@ -24,6 +24,11 @@ const orderSchema = mongoose.Schema({
         enum: ['created', 'paid', 'failed', 'refunded'],
         default: "created",
     }, 
+    paymentIntent : {
+        type: String,
+        required: true,
+        trim: true
+    },
     
 }, {
         timestamps: true

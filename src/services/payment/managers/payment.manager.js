@@ -8,40 +8,45 @@ const paymentManager = {
         switch(gateway){
             
             case 'stripe': 
-                try {
-                    const stripeOrder = await order.create({
-                        paymentGateway: gateway,
-                        userId,
-                        amount,
-                        currency,
-                    })
-                    logger.info(`order created`, stripeOrder);
-                } catch (error) {
-                    logger.error(`Cannot create order`, error);
-                }
-                return stripeGateway.createPaymentIntent(
+                const stripeDetails = await stripeGateway.createPaymentIntent(
                     amount,
                     currency,
-                  
                     paymentDetails.paymentMethodId,
                     paymentDetails.customerId
-                );
-            case 'razorpay':
+                )
                  try {
                     const stripeOrder = await order.create({
                         paymentGateway: gateway,
                         userId,
                         amount,
                         currency,
+                        paymentIntent: stripeDetails.id
                     })
                     logger.info(`order created`, stripeOrder);
                 } catch (error) {
                     logger.error(`Cannot create order`, error);
                 }
-                return razorpayGateway.createOrder(
+               
+                return stripeDetails;
+            case 'razorpay':
+                const razorpayDetail = await razorpayGateway.createOrder(
                     amount,
                     currency,
-                );
+                )
+
+                try {
+                    const stripeOrder = await order.create({
+                        paymentGateway: gateway,
+                        userId,
+                        amount,
+                        currency,
+                        paymentIntent: razorpayDetail.id
+                    })
+                    logger.info(`order created`, stripeOrder);
+                } catch (error) {
+                    logger.error(`Cannot create order`, error);
+                }
+                return razorpayDetail;
             default: 
                 throw new Error('Invalid payment gateway specified');
         }

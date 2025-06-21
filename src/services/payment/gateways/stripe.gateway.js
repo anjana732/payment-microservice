@@ -37,7 +37,7 @@ const stripe = new Stripe(config.stripe.secretKey, {
 });
 
 const stripeGateway = {
-    // 1. Create Payment Intent
+   
     createPaymentIntent: async (amount, currency, userId, paymentMethodId, customerId) => {
         const params = {
             amount: Math.round(amount * 100),
@@ -58,7 +58,7 @@ const stripeGateway = {
         return stripe.paymentIntents.retrieve(paymentIntentId);
     },
 
-    // 3. Capture Payment (for manually authorized flows)
+  
     capturePayment: async (paymentIntentId) => {
         return stripe.paymentIntents.capture(paymentIntentId);
     },

@@ -2,7 +2,7 @@ import stripeGateway from "../gateways/stripe.gateway.js";
 import razorpayGateway from "../gateways/razorpay.gateway.js";
 
 const paymentManager = {
-    processPayment: async (gateway, amount, currency, orderId, paymentDetails = {})=>{
+    processCreatePayment: async (gateway, amount, currency, orderId, paymentDetails = {})=>{
         switch(gateway){
             case 'stripe': 
                 return stripeGateway.createPaymentIntent(
@@ -24,7 +24,7 @@ const paymentManager = {
         }
     },
 
-    refundPayment: async (gateway, paymentId, amount) => {
+    processRefundPayment: async (gateway, paymentId, amount) => {
         switch(gateway) {
             case 'stripe' :
                 return stripeGateway.createRefund(paymentId, amount);
@@ -34,6 +34,41 @@ const paymentManager = {
                 throw new Error('Invalid payment gateway specified for refund.');
         }
     },
+
+    processCancelPayment: async (gateway, paymentId) => {
+        switch(gateway){
+            case 'stripe' :
+                return stripeGateway.cancelPayment(paymentId);
+            case 'razorpay' :
+                return razorpayGateway.cancelPayment(paymentId);
+            default: 
+                throw new Error('Invalid payment gateway specified for refund.');
+        }
+    },
+
+    processCapturePayment: async (gateway, paymentId) => {
+        switch(gateway){
+            case 'stripe' : 
+                return stripeGateway.capturePayment(paymentId);
+            case 'razorpay' :
+                return razorpayGateway.capturePayment(paymentId);
+            default: 
+                throw new Error('Invalid payment gateway specified for refund.');
+        }
+    },
+
+    processRetrievePayment : async (gateway, paymentId) => {
+        switch(gateway) {
+            case 'stripe':
+                return stripeGateway.retrievePaymentIntent(paymentId);
+            case 'razorpay' : 
+                return razorpayGateway.retrievePaymentIntent(paymentId);
+            default: 
+                throw new Error('Invalid payment gateway specified for refund.');
+        }
+    }
+
+
 }
 
 export default paymentManager;

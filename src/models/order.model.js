@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const orderSchema = mongoose.Schema({
+    paymentGateway: {
+        type: String,
+        enum: ['stripe', 'razorpay'],
+        retuired : [true, 'payement gateway is required']
+    },
     userId : {
         type: String,
         required: true,
@@ -17,7 +22,7 @@ const orderSchema = mongoose.Schema({
     status : {
         type: String,
         enum: ['created', 'paid', 'failed', 'refunded'],
-        default: create,
+        default: "created",
     }, 
     
 }, {

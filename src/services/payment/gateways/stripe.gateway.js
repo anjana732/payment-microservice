@@ -54,7 +54,6 @@ const stripeGateway = {
         return stripe.paymentIntents.create(params);
     },
 
-    // 2. Retrieve Payment Intent
     retrievePaymentIntent: async (paymentIntentId) => {
         return stripe.paymentIntents.retrieve(paymentIntentId);
     },

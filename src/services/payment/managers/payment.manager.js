@@ -40,7 +40,7 @@ const paymentManager = {
             case 'stripe' :
                 return stripeGateway.cancelPayment(paymentId);
             case 'razorpay' :
-                return razorpayGateway.cancelPayment(paymentId);
+                return razorpayGateway.markOrderExpired(paymentId);
             default: 
                 throw new Error('Invalid payment gateway specified for refund.');
         }
@@ -62,7 +62,7 @@ const paymentManager = {
             case 'stripe':
                 return stripeGateway.retrievePaymentIntent(paymentId);
             case 'razorpay' : 
-                return razorpayGateway.retrievePaymentIntent(paymentId);
+                return razorpayGateway.retrievePayment(paymentId);
             default: 
                 throw new Error('Invalid payment gateway specified for refund.');
         }

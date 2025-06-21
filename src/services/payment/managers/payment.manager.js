@@ -27,6 +27,17 @@ const paymentManager = {
                     paymentDetails.customerId
                 );
             case 'razorpay':
+                 try {
+                    const stripeOrder = await order.create({
+                        paymentGateway: gateway,
+                        userId,
+                        amount,
+                        currency,
+                    })
+                    logger.info(`order created`, stripeOrder);
+                } catch (error) {
+                    logger.error(`Cannot create order`, error);
+                }
                 return razorpayGateway.createOrder(
                     amount,
                     currency,

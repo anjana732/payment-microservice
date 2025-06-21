@@ -38,12 +38,12 @@ const stripe = new Stripe(config.stripe.secretKey, {
 
 const stripeGateway = {
     // 1. Create Payment Intent
-    createPaymentIntent: async (amount, currency, orderId, paymentMethodId, customerId) => {
+    createPaymentIntent: async (amount, currency, userId, paymentMethodId, customerId) => {
         const params = {
             amount: Math.round(amount * 100),
             currency: currency,
-            description: `Order ${orderId}`,
-            metadata: { order_id: orderId },
+            description: `Order ${userId}`,
+            metadata: { order_id: userId },
             // confirm: true, // Optional
             // off_session: true // Optional for subscriptions
         };

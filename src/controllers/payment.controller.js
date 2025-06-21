@@ -2,12 +2,14 @@ import paymentManager from "../services/payment/managers/payment.manager.js";
 import stripeWebhook from "../services/payment/webhooks/stripe.webhook.js";
 import razorpayWebhook from "../services/payment/webhooks/razorpay.webhook.js";
 import { logger } from "../utils/logger.js";
-import order from "../models/order.model.js";
 
-const processPayement = async (req, res, next) => {
-    const {amount, currency, gateway, orderId, paymentDetails} = req.body;
 
-    if(!amount || !currency || !gateway || !orderId){
+const processCreatePayement = async (req, res, next) => {
+    const {amount, currency, gateway, paymentDetails} = req.body;
+    const userId = req.user?.id;
+    console.log('user id is: ',userId);
+
+    if(!amount || !currency || !gateway){
         logger.warn(`Validation Error: Missing required payment details`);
         return res.status(400).json({
             success: false,
@@ -17,11 +19,12 @@ const processPayement = async (req, res, next) => {
 
     try {
 
-        const result = await paymentManager.processPayment(
+        const result = await paymentManager.processCreatePayment(
             gateway,
+             userId,
             amount,
             currency,
-            orderId,
+            // orderId,
             paymentDetails
         )
 
@@ -45,7 +48,7 @@ const handleRazorPayWebhook = (req, res) => {
 }
 
 export {
-    processPayement,
+    processCreatePayement,
     handleStripeWebhook,
     handleRazorPayWebhook
 }

@@ -1,14 +1,28 @@
 import stripeGateway from "../gateways/stripe.gateway.js";
 import razorpayGateway from "../gateways/razorpay.gateway.js";
+import order from "../../../models/order.model.js";
+import {logger} from "../../../utils/logger.js"
 
 const paymentManager = {
-    processCreatePayment: async (gateway, amount, currency, orderId, paymentDetails = {})=>{
+    processCreatePayment: async (gateway, userId, amount, currency, paymentDetails = {})=>{
         switch(gateway){
+            
             case 'stripe': 
+                try {
+                    const stripeOrder = await order.create({
+                        paymentGateway: gateway,
+                        userId,
+                        amount,
+                        currency,
+                    })
+                    logger.info(`order created`, stripeOrder);
+                } catch (error) {
+                    logger.error(`Cannot create order`, error);
+                }
                 return stripeGateway.createPaymentIntent(
                     amount,
                     currency,
-                    orderId,
+                  
                     paymentDetails.paymentMethodId,
                     paymentDetails.customerId
                 );
@@ -16,8 +30,6 @@ const paymentManager = {
                 return razorpayGateway.createOrder(
                     amount,
                     currency,
-                    orderId,
-                    paymentDetails.notes
                 );
             default: 
                 throw new Error('Invalid payment gateway specified');

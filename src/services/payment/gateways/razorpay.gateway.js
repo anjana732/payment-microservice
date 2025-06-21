@@ -37,17 +37,27 @@ const razorpay = new Razorpay({
 
 const razorpayGateway = {
  
-    createOrder: async (amount, currency, orderId, notes = {}) => {
-        const options = {
-            amount: Math.round(amount * 100), // in paise
-            currency: currency,
-            receipt: `receipt_${orderId || Date.now()}`,
-            payment_capture: 1,
-            notes: { ...notes, order_id: orderId },
-        };
-        return razorpay.orders.create(options);
-    },
+    // createOrder: async (amount, currency,) => {
+    //     const options = {
+    //         amount: Math.round(amount * 100),
+    //         currency: currency,
+    //         receipt: `receipt_${Date.now()}`,
+    //         payment_capture: 1,
+           
+    //     };
+    //     return razorpay.orders.create(options);
+    // },
 
+    createOrder: async (amount, currency) => {
+    const options = {
+        amount: Math.round(amount * 100),
+        currency: currency,
+        receipt: `receipt_${Date.now()}`, // Auto-generated unique receipt
+        payment_capture: 1
+    };
+
+    return razorpay.orders.create(options);
+},
  
     capturePayment: async (paymentId, amount) => {
         return razorpay.payments.capture(paymentId, Math.round(amount * 100));
@@ -61,7 +71,7 @@ const razorpayGateway = {
     createRefund: async (paymentId, amount) => {
         const refundPayload = { payment_id: paymentId };
         if (amount) {
-            refundPayload.amount = Math.round(amount * 100); // partial refund
+            refundPayload.amount = Math.round(amount * 100);
         }
         return razorpay.refunds.create(refundPayload);
     },

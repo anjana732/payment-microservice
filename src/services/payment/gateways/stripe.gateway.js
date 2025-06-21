@@ -7,6 +7,7 @@ const stripe = Stripe(config.stripe.secretKey, {
 
 const stripeGateway = {
     createPaymentIntent: async (amount,currency,orderId, paymentMethodId, customerId) => {
+        
         const params = {
             amount: Math.round(amount * 100),
             currency: currency,

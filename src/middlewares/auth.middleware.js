@@ -8,8 +8,9 @@ const authMiddleware = (req,res, next) => {
     const token = authHeader.split(" ")[1];
 
     try {
-        const decoded = jwt.verify.apply(token,process.env.JWT_SECRET);
+        const decoded = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET);
         req.user = decoded;
+        console.log(decoded);
         next();
     } catch (error) {
         return res.status(403).json({ message: "Invalid or expired token" });

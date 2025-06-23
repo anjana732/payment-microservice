@@ -17,18 +17,17 @@ const razorpayWebhook = (req, res) => {
             case 'payment.captured':
                 const paymentCaptured = eventPayload.payload.payment.entity;
                 console.log('Razorpay Payment Captured:', paymentCaptured.id);
-                // TODO: Call your internal order service to update order status
-                // await orderService.updateOrderStatus(paymentCaptured.notes.order_id, 'paid');
+              
                 break;
             case 'order.paid':
                 const orderPaid = eventPayload.payload.order.entity;
                 console.log('Razorpay Order Paid:', orderPaid.id);
-                // TODO: Update order status
+          
                 break;
             case 'payment.failed':
                 const paymentFailed = eventPayload.payload.payment.entity;
                 console.log('Razorpay Payment Failed:', paymentFailed.id, paymentFailed.error_description);
-                // TODO: Update order status
+               
                 break;
             default:
                 console.log(`Unhandled Razorpay event type ${eventPayload.event}`);

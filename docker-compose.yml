@@ -1,0 +1,49 @@
+# services:
+#   payment:
+#     build: .
+#     container_name: payment-service
+#     ports:
+#       - "3055:3000"
+#     env_file:
+#       - .env
+#     volumes:
+#       - .:/app
+#       - /app/node_modules
+#     dns:
+#       - 8.8.8.8
+#       - 8.8.4.4
+#     restart: unless-stopped
+# docker-compose.yml
+
+version: '3.8' # Using a modern Docker Compose version
+
+services:
+  payment:
+    build: . # Tells Docker to build the image from the current directory (where Dockerfile is)
+    container_name: payment-service # A friendly name for your container
+    ports:
+      # Maps host port 3055 to container port 5000.
+      # You'll access your service from your host machine at http://localhost:3055
+      - "3055:5000"
+    env_file:
+      # Specifies to load environment variables from the .env file in the same directory.
+      # This is where your MONGODB_URI will be picked up.
+      - .env
+    volumes:
+      # Mounts your local project directory into the /app directory inside the container.
+      # This is excellent for development as code changes on your host are instantly reflected.
+      - .:/app
+      # Explicitly creates a volume for node_modules. This prevents your host's node_modules
+      # from overwriting the ones installed inside the container (which might be for different architectures/OS).
+      # It ensures npm install's output is used.
+      - /app/node_modules
+    # dns:
+      # These DNS servers are generally not strictly necessary for connecting to MongoDB Atlas,
+      # as the container typically inherits proper DNS resolution from the Docker daemon or host.
+      # Uncomment only if you face specific DNS resolution issues for Atlas.
+      # - 8.8.8.8
+      # - 8.8.4.4
+    restart: unless-stopped # Ensures the container restarts automatically unless explicitly stopped
+
+# No need for a 'mongo' service here since you're using MongoDB Atlas.
+# If you were running a local MongoDB instance, it would go here.

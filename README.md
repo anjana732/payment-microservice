@@ -104,7 +104,7 @@ docker-compose up --build
  -->
 
 
-```md
+
 # Payment Microservice 🚀
 
 Welcome to the **Payment Microservice** repository. This project is built using **Node.js**, **Express**, and **MongoDB** and it integrates with popular payment gateways like **Stripe** and **Razorpay**. The service exposes endpoints to create, retrieve, capture, and cancel payments, and supports webhook integrations for real-time payment updates.

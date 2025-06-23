@@ -1,0 +1,148 @@
+openapi: 3.0.0
+info:
+  title: Payment Microservice API
+  description: API documentation for payment operations using Stripe and Razorpay.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+
+paths:
+  /process-create:
+    post:
+      summary: Initiate a new payment
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - amount
+                - currency
+                - gateway
+              properties:
+                amount:
+                  type: number
+                currency:
+                  type: string
+                gateway:
+                  type: string
+                paymentDetails:
+                  type: object
+      responses:
+        '200':
+          description: Payment initiation successful
+        '400':
+          description: Missing required payment details
+
+  /process-retrieve:
+    post:
+      summary: Retrieve a payment intent
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - gateway
+                - paymentIntent
+              properties:
+                gateway:
+                  type: string
+                paymentIntent:
+                  type: string
+      responses:
+        '200':
+          description: Payment retrieval successful
+        '400':
+          description: Missing required payment details
+
+  /process-capture:
+    post:
+      summary: Capture a payment
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - gateway
+                - paymentIntent
+              properties:
+                gateway:
+                  type: string
+                paymentIntent:
+                  type: string
+      responses:
+        '200':
+          description: Payment capture successful
+        '400':
+          description: Missing required payment details
+
+  /process-cancel:
+    post:
+      summary: Cancel a payment
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - gateway
+                - paymentIntent
+              properties:
+                gateway:
+                  type: string
+                paymentIntent:
+                  type: string
+      responses:
+        '200':
+          description: Payment cancel successful
+        '400':
+          description: Missing required payment details
+
+  /process-stripewebhook:
+    post:
+      summary: Stripe webhook for payment updates
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Webhook processed successfully
+
+  /process-razorpaywebhook:
+    post:
+      summary: Razorpay webhook for payment updates
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Webhook processed successfully
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

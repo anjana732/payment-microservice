@@ -17,7 +17,5 @@ router.post('/process-cancel', authMiddleware, processCancelPayment);
 router.post('/process-stripewebhook', handleStripeWebhook);
 router.post('/process-razorpaywebhook', handleRazorPayWebhook);
 
-
-
 export default router;
 

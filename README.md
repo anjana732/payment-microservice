@@ -1,4 +1,4 @@
-<!-- # 💳 Payment Microservice
+# 💳 Payment Microservice
 
 A standalone Node.js microservice that handles payment processing through **Stripe** and **Razorpay** gateways. Built with modular design to support extensibility and scalability, and includes webhook handling and gateway abstraction.
 
@@ -100,9 +100,6 @@ docker build -t payment-microservice .
 ```bash
 docker-compose up --build
 ```
-
- -->
-
 
 
 # Payment Microservice 🚀
@@ -326,4 +323,3 @@ Your valuable contributions help improve this project for everyone!
 ---
 
 Happy coding! 🎉
-```
